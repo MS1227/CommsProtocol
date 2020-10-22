@@ -2,8 +2,10 @@
 #include <iostream>
 
 using namespace std;
+using namespace Message;
 
-void TestMessage::writeToBuffer()
+ErrorStatus ConcreteMessage::TestMessage::writeToBuffer()
 {
     cout << "Heres my message" << endl;    
+    return ErrorStatus::success;
 }

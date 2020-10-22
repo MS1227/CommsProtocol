@@ -1,7 +1,10 @@
 #pragma once
 #include "IMessage.h"
 
-class TestMessage : public IMessage
+namespace ConcreteMessage
 {
-   void writeToBuffer() override; 
-};
+    class TestMessage : public Message::IMessage
+    {
+       Message::ErrorStatus writeToBuffer() override; 
+    };
+}

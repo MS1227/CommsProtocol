@@ -1,11 +1,16 @@
 #pragma once
-class IMessage
+namespace Message
 {
-    public:
-        void write()
-        {
-            writeToBuffer();
-        }
-    protected:
-        virtual void writeToBuffer() = 0;
-};
+    enum class ErrorStatus { success, fail };
+    class IMessage 
+    {
+        public:
+            ErrorStatus write()
+            {
+                return writeToBuffer();
+            }
+        protected:
+            virtual Message::ErrorStatus writeToBuffer() = 0;
+        
+    };
+}
