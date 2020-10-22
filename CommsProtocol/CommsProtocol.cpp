@@ -89,7 +89,7 @@ int main(int argc, char* argv[], char* envp[])
     //Check to see if we have a valid configuration, or enough information to start up an interface.
     if (!ValidConfig(configs)) {
         Usage();
-        for (auto c : configs) {
+        for (auto& c : configs) {
             delete c;
         }
         return 0;
@@ -99,7 +99,7 @@ int main(int argc, char* argv[], char* envp[])
 
     std::getchar();
 
-    for (auto c : configs) {
+    for (auto& c : configs) {
         delete c;
     }
     return 0;
