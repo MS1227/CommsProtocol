@@ -1,7 +1,7 @@
 #pragma once
 #include "IMessage.h"
 
-class TestMessage : public IMessage
+class TestMessageTwo : public IMessage
 {
    void writeToBuffer() override; 
 };
