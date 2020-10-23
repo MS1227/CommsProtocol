@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommsProtocol", "CommsProtocol\CommsProtocol.vcxproj", "{7028EA9C-30B7-4A1E-872E-334CA8CDB6A2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommsProtocolTest", "CommsProtocolTest\CommsProtocolTest.vcxproj", "{8C601912-FC94-4823-BF62-BF5694846F13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{7028EA9C-30B7-4A1E-872E-334CA8CDB6A2}.Release|x64.Build.0 = Release|x64
 		{7028EA9C-30B7-4A1E-872E-334CA8CDB6A2}.Release|x86.ActiveCfg = Release|Win32
 		{7028EA9C-30B7-4A1E-872E-334CA8CDB6A2}.Release|x86.Build.0 = Release|Win32
+		{8C601912-FC94-4823-BF62-BF5694846F13}.Debug|x64.ActiveCfg = Debug|x64
+		{8C601912-FC94-4823-BF62-BF5694846F13}.Debug|x64.Build.0 = Debug|x64
+		{8C601912-FC94-4823-BF62-BF5694846F13}.Debug|x86.ActiveCfg = Debug|Win32
+		{8C601912-FC94-4823-BF62-BF5694846F13}.Debug|x86.Build.0 = Debug|Win32
+		{8C601912-FC94-4823-BF62-BF5694846F13}.Release|x64.ActiveCfg = Release|x64
+		{8C601912-FC94-4823-BF62-BF5694846F13}.Release|x64.Build.0 = Release|x64
+		{8C601912-FC94-4823-BF62-BF5694846F13}.Release|x86.ActiveCfg = Release|Win32
+		{8C601912-FC94-4823-BF62-BF5694846F13}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

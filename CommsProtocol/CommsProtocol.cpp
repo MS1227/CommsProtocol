@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 #include "EthernetConfig.h"
 #include "CommandLineConfiguration.h"
@@ -37,9 +38,9 @@ void Usage() {
     std::cout << std::endl;
 }
 
-std::vector<CommsProtocol::ICommandConfiguration*> ProcessConfigurations(int argc, char* argv[], char* envp[]) {
+std::vector<std::unique_ptr<CommsProtocol::ICommandConfiguration>> ProcessConfigurations(int argc, char* argv[], char* envp[]) {
 
-    std::vector< CommsProtocol::ICommandConfiguration*> configs;
+    std::vector< std::unique_ptr<CommsProtocol::ICommandConfiguration>> configs;
 
     std::vector<std::string> commandLineSwitches;
     for (const auto& opt : CommandLineConfigMap) {
@@ -47,9 +48,7 @@ std::vector<CommsProtocol::ICommandConfiguration*> ProcessConfigurations(int arg
     }
 
     //First lets get the command line data.
-    CommsProtocol::CommandLineConfiguration* config = new CommsProtocol::CommandLineConfiguration(argc, argv, envp, commandLineSwitches);
-
-    configs.push_back(config);
+    std::unique_ptr<CommsProtocol::CommandLineConfiguration> config = std::make_unique<CommsProtocol::CommandLineConfiguration>(argc, argv, envp, commandLineSwitches);
 
     //Now lets see if we have a file that we can read based on the /f flag from the command line.
     if (config->HasCommandArgument("/f")) {
@@ -60,15 +59,17 @@ std::vector<CommsProtocol::ICommandConfiguration*> ProcessConfigurations(int arg
         }
 
         std::string filename(config->GetCommandArgument("/f"));
-        CommsProtocol::FileConfiguration* fileConfig = new CommsProtocol::FileConfiguration(filename, envp, fileSwitches);
+        std::unique_ptr < CommsProtocol::FileConfiguration> fileConfig = std::make_unique<CommsProtocol::FileConfiguration>(filename, envp, fileSwitches);
 
-        configs.push_back(fileConfig);
+        configs.push_back(std::move(fileConfig));
     }
+
+    configs.push_back(std::move(config));
 
     return configs;    
 }
 
-bool ValidConfig(std::vector< CommsProtocol::ICommandConfiguration*> configs) {
+bool ValidConfig(const std::vector<std::unique_ptr<CommsProtocol::ICommandConfiguration>> &configs) {
     return false;
 }
 
@@ -82,25 +83,18 @@ bool ValidConfig(std::vector< CommsProtocol::ICommandConfiguration*> configs) {
 int main(int argc, char* argv[], char* envp[])
 {
     //First lets get our configurations.  
-    std::vector< CommsProtocol::ICommandConfiguration*> configs = ProcessConfigurations(argc, argv, envp);
+    std::vector<std::unique_ptr<CommsProtocol::ICommandConfiguration>> configs = ProcessConfigurations(argc, argv, envp);
     
     applicationName = argv[0];
 
     //Check to see if we have a valid configuration, or enough information to start up an interface.
     if (!ValidConfig(configs)) {
         Usage();
-        for (auto& c : configs) {
-            delete c;
-        }
-        return 0;
     }
 
     //Now that we know we have a valid config, let try to create an ethernet Object from it.
 
     std::getchar();
 
-    for (auto& c : configs) {
-        delete c;
-    }
     return 0;
 }

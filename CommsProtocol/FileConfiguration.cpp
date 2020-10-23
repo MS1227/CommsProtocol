@@ -1,28 +1,18 @@
 #include "FileConfiguration.h"
+#include <sstream>
+#include <algorithm>
 
 namespace CommsProtocol {
     FileConfiguration::FileConfiguration(std::string filename, char* envp[], std::vector<std::string> validCommands) :
-        m_validCommandArgs(validCommands)
+        m_fileName(filename)
     {
-    }
+        // Store all environment variables for potential use later.
+        for (int i = 0; envp[i] != NULL; ++i) {
+            m_inputEnvVars.push_back(envp[i]);
+        }
 
-    bool FileConfiguration::HasCommandArgument(std::string arg)
-    {
-        return false;
-    }
+        m_validCommandArgs = validCommands;
 
-    bool FileConfiguration::HasEnvironmentVariable(std::string arg)
-    {
-        return false;
-    }
-
-    std::string FileConfiguration::GetCommandArgument(std::string arg)
-    {
-        return std::string();
-    }
-
-    std::string FileConfiguration::GetEnvironmentVariable(std::string varName)
-    {
-        return std::string();
+        StoreEnvVarsInMap();
     }
 }
