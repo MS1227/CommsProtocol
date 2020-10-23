@@ -11,5 +11,6 @@ namespace CommsProtocol {
     {
     public:
         CommandLineConfiguration(int argc, char* argv[], char* envp[], std::vector<std::string> validCommandArgs);
+        CommandLineConfiguration() = delete;
     };
 }

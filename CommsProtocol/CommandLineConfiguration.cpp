@@ -13,11 +13,13 @@ namespace CommsProtocol {
         for (int ix = 1; ix < argc; ++ix) {
             m_inputCommandArgs.push_back(argv[ix]);
         }
-
-        // Store all environment variables for potential use later.
-        for (int i = 0; envp[i] != NULL; ++i) {
-            m_inputEnvVars.push_back(envp[i]);
+        if (envp != nullptr) {
+            // Store all environment variables for potential use later.
+            for (int i = 0; envp[i] != NULL; ++i) {
+                m_inputEnvVars.push_back(envp[i]);
+            }
         }
+
 
         m_validCommandArgs = validCommandArgs;
 

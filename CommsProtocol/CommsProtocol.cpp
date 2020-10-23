@@ -94,7 +94,5 @@ int main(int argc, char* argv[], char* envp[])
 
     //Now that we know we have a valid config, let try to create an ethernet Object from it.
 
-    std::getchar();
-
     return 0;
 }
