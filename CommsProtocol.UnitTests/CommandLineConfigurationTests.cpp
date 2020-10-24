@@ -7,7 +7,7 @@ using namespace CommsProtocol;
 
 namespace {
 
-	TEST(CommandLineConfiguration, CallCtorWithNoArgs) {
+	TEST(CommandLineConfiguration, CallCtorWithNoArgs_HowToTest) {
 
 		std::vector<std::string> args;
 		std::vector<std::string> envp;
@@ -18,7 +18,7 @@ namespace {
 		ASSERT_FALSE(config.HasCommandArgument(""));
 	}
 
-	TEST(CommandLineConfiguration, OneCommandValid) {
+	TEST(CommandLineConfiguration, CommandValidWithKey_SavesKey) {
 
 		std::vector<std::string> args{ "/Mike", "/bob", "InvalidFormatted", "/f" };
 		std::vector<std::string> envp;
@@ -30,7 +30,7 @@ namespace {
 		ASSERT_EQ(config.GetCommandArgument(args[0]), args[1]);
 	}
 
-	TEST(CommandLineConfiguration, CommandSwitchButNoValue_DoesntSaveSwitch) {
+	TEST(CommandLineConfiguration, ValidCommandButIsLastArg_DoesntSaveSwitch) {
 
 		std::vector<std::string> args{ "/Mike" };
 		std::vector<std::string> envp;
