@@ -20,26 +20,26 @@ namespace {
 
 	TEST(CommandLineConfiguration, OneCommandValid) {
 
-		std::vector<std::string> args{ "Test.exe", "/Mike", "/bob", "InvalidFormatted", "/f" };
+		std::vector<std::string> args{ "/Mike", "/bob", "InvalidFormatted", "/f" };
 		std::vector<std::string> envp;
 		std::vector<std::string> validCommands{ "/f","/Mike"};
 
 		CommandLineConfiguration config(args, envp, validCommands);
 
-		ASSERT_TRUE(config.HasCommandArgument(args[1]));
-		ASSERT_EQ(config.GetCommandArgument(args[1]), args[2]);
+		ASSERT_TRUE(config.HasCommandArgument(args[0]));
+		ASSERT_EQ(config.GetCommandArgument(args[0]), args[1]);
 	}
 
 	TEST(CommandLineConfiguration, CommandSwitchButNoValue_DoesntSaveSwitch) {
 
-		std::vector<std::string> args{ "Test.exe", "/Mike" };
+		std::vector<std::string> args{ "/Mike" };
 		std::vector<std::string> envp;
 		std::vector<std::string> validCommands{ "/f","/Mike" };
 
 		CommandLineConfiguration config(args, envp, validCommands);
 
-		ASSERT_FALSE(config.HasCommandArgument(args[1]));
-		ASSERT_EQ(config.GetCommandArgument(args[1]), std::string(""));
+		ASSERT_FALSE(config.HasCommandArgument(args[0]));
+		ASSERT_EQ(config.GetCommandArgument(args[0]), std::string(""));
 	}
 
 }  // namespace
