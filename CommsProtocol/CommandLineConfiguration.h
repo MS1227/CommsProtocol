@@ -10,7 +10,7 @@ namespace CommsProtocol {
         public BaseCommandConfiguration
     {
     public:
-        CommandLineConfiguration(int argc, char* argv[], char* envp[], std::vector<std::string> validCommandArgs);
+        CommandLineConfiguration(std::vector<std::string> args, std::vector<std::string> envp, std::vector<std::string> validCommandArgs);
         CommandLineConfiguration() = delete;
     };
 }

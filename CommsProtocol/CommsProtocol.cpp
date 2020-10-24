@@ -1,5 +1,8 @@
 #include <iostream>
+#include <string>
 #include <memory>
+#include <map>
+#include <vector>
 
 #include "EthernetConfig.h"
 #include "CommandLineConfiguration.h"
@@ -16,6 +19,9 @@ std::map<std::string, std::string> FileConfigMap{
     {"Protocol", "Protocol: 0 (TCP Client), 1 (TCP Server), 2 (UDP), 3 (Multicast)" } };
 
 std::string applicationName;
+
+std::vector<std::string> parametersArgs;
+std::vector<std::string> parameterEnvironmentVars;
 
 /// <summary>
 /// Prints the usage for how to configure the 
@@ -38,7 +44,24 @@ void Usage() {
     std::cout << std::endl;
 }
 
-std::vector<std::unique_ptr<CommsProtocol::ICommandConfiguration>> ProcessConfigurations(int argc, char* argv[], char* envp[]) {
+void StoreParameters(int argc, char* argv[], char* envp[]) {
+
+    applicationName = argv[0];
+
+    //Store off all Command line arguments.
+    //Skip index 0 as that is the name of the application.        
+    for (int ix = 1; ix < argc; ++ix) {
+        parametersArgs.push_back(argv[ix]);
+    }
+    if (envp != nullptr) {
+        // Store all environment variables for potential use later.
+        for (int i = 0; envp[i] != NULL; ++i) {
+            parameterEnvironmentVars.push_back(envp[i]);
+        }
+    }
+}
+
+std::vector<std::unique_ptr<CommsProtocol::ICommandConfiguration>> ProcessConfigurations() {
 
     std::vector< std::unique_ptr<CommsProtocol::ICommandConfiguration>> configs;
 
@@ -48,7 +71,8 @@ std::vector<std::unique_ptr<CommsProtocol::ICommandConfiguration>> ProcessConfig
     }
 
     //First lets get the command line data.
-    std::unique_ptr<CommsProtocol::CommandLineConfiguration> config = std::make_unique<CommsProtocol::CommandLineConfiguration>(argc, argv, envp, commandLineSwitches);
+    std::unique_ptr<CommsProtocol::CommandLineConfiguration> config = 
+        std::make_unique<CommsProtocol::CommandLineConfiguration>(parametersArgs, parameterEnvironmentVars, commandLineSwitches);
 
     //Now lets see if we have a file that we can read based on the /f flag from the command line.
     if (config->HasCommandArgument("/f")) {
@@ -59,7 +83,8 @@ std::vector<std::unique_ptr<CommsProtocol::ICommandConfiguration>> ProcessConfig
         }
 
         std::string filename(config->GetCommandArgument("/f"));
-        std::unique_ptr < CommsProtocol::FileConfiguration> fileConfig = std::make_unique<CommsProtocol::FileConfiguration>(filename, envp, fileSwitches);
+        std::unique_ptr < CommsProtocol::FileConfiguration> fileConfig = 
+            std::make_unique<CommsProtocol::FileConfiguration>(filename, parameterEnvironmentVars, fileSwitches);
 
         configs.push_back(std::move(fileConfig));
     }
@@ -82,10 +107,10 @@ bool ValidConfig(const std::vector<std::unique_ptr<CommsProtocol::ICommandConfig
 /// <returns></returns>
 int main(int argc, char* argv[], char* envp[])
 {
-    //First lets get our configurations.  
-    std::vector<std::unique_ptr<CommsProtocol::ICommandConfiguration>> configs = ProcessConfigurations(argc, argv, envp);
-    
-    applicationName = argv[0];
+    //Normalize our input data to a C++ container.
+    StoreParameters(argc, argv, envp);
+    //Store off our configurations.  
+    std::vector<std::unique_ptr<CommsProtocol::ICommandConfiguration>> configs = ProcessConfigurations();
 
     //Check to see if we have a valid configuration, or enough information to start up an interface.
     if (!ValidConfig(configs)) {

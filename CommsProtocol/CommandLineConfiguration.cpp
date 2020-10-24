@@ -7,28 +7,16 @@
 namespace CommsProtocol {
 
     /// <summary>
-    /// For now the assumption is that Command line arguments are passed as "Key" "Value"
-    /// That is to say that when we find a valid switch, we check the next word if it is there, it is the value for the switch.
-    /// and we store that off.
+    /// For now the assumption is that Command line arguments are passed as "Key Value"
+    /// That is to say that when we find a valid switch (key), we check the next word and if it is there, we use it as the svalue for the switch.
     /// </summary>
-    /// <param name="argc"></param>
-    /// <param name="argv"></param>
+    /// <param name="args"></param>
     /// <param name="envp"></param>
     /// <param name="validCommandArgs"></param>
-    CommandLineConfiguration::CommandLineConfiguration(int argc, char* argv[], char* envp[], std::vector<std::string> validCommandArgs)   
+    CommandLineConfiguration::CommandLineConfiguration(std::vector<std::string> args, std::vector<std::string> envp, std::vector<std::string> validCommandArgs) 
     {
-        //Store off all Command line arguments.
-        //Skip index 0 as that is the name of the application.
-        for (int ix = 1; ix < argc; ++ix) {
-            m_inputCommandArgs.push_back(argv[ix]);
-        }
-        if (envp != nullptr) {
-            // Store all environment variables for potential use later.
-            for (int i = 0; envp[i] != NULL; ++i) {
-                m_inputEnvVars.push_back(envp[i]);
-            }
-        }
-
+        m_inputCommandArgs = args;
+        m_inputEnvVars = envp;
         m_validCommandArgs = validCommandArgs;
 
         StoreCommandArgsInMap();

@@ -10,8 +10,10 @@ namespace {
 
 	TEST(CommandLineConfiguration, CallCtorWithNoArgs) {
 
+		std::vector<std::string> args;
+		std::vector<std::string> envp;
 		std::vector<std::string> validCommands;
-		CommandLineConfiguration config(0, nullptr, nullptr, validCommands);
+		CommandLineConfiguration config(args, envp, validCommands);
 
 		ASSERT_TRUE(config.GetCommandArgument("") == "");
 		ASSERT_FALSE(config.HasCommandArgument(""));
@@ -19,58 +21,26 @@ namespace {
 
 	TEST(CommandLineConfiguration, OneCommandValid) {
 
+		std::vector<std::string> args{ "Test.exe", "/Mike", "/bob", "InvalidFormatted", "/f" };
+		std::vector<std::string> envp;
 		std::vector<std::string> validCommands{ "/f","/Mike"};
 
-		//Here use a fixed size.
-		//First element is always the executable, will always skip.
-		std::array<std::string, 5> CommandArgs{ "Test.exe", "/Mike", "/bob", "InvalidFormatted", "/f" };
+		CommandLineConfiguration config(args, envp, validCommands);
 
-		char** input = new char* [CommandArgs.size()];
-		size_t arrSize = 0;
-		for (auto c : CommandArgs) {
-		
-			input[arrSize] = new char[c.size() + 1];
-			strcpy_s(input[arrSize++], c.size() + 1, c.c_str());
-		}
-
-		CommandLineConfiguration config(CommandArgs.size(), input, nullptr, validCommands);
-
-		ASSERT_TRUE(config.HasCommandArgument(CommandArgs[1]));
-		ASSERT_EQ(config.GetCommandArgument(CommandArgs[1]), CommandArgs[2]);
-
-
-		for (int ix = CommandArgs.size() - 1; ix >= 0; --ix) {
-			delete input[ix];
-		}
-		delete[] input;
+		ASSERT_TRUE(config.HasCommandArgument(args[1]));
+		ASSERT_EQ(config.GetCommandArgument(args[1]), args[2]);
 	}
 
 	TEST(CommandLineConfiguration, CommandSwitchButNoValue_DoesntSaveSwitch) {
 
+		std::vector<std::string> args{ "Test.exe", "/Mike" };
+		std::vector<std::string> envp;
 		std::vector<std::string> validCommands{ "/f","/Mike" };
 
-		//Here use a fixed size.
-		//First element is always the executable, will always skip.
-		std::array<std::string, 2> CommandArgs{ "Test.exe", "/Mike"};
+		CommandLineConfiguration config(args, envp, validCommands);
 
-		char** input = new char* [CommandArgs.size()];
-		size_t arrSize = 0;
-		for (auto c : CommandArgs) {
-
-			input[arrSize] = new char[c.size() + 1];
-			strcpy_s(input[arrSize++], c.size() + 1, c.c_str());
-		}
-
-		CommandLineConfiguration config(CommandArgs.size(), input, nullptr, validCommands);
-
-		ASSERT_FALSE(config.HasCommandArgument(CommandArgs[1]));
-		ASSERT_EQ(config.GetCommandArgument(CommandArgs[1]), std::string(""));
-
-
-		for (int ix = CommandArgs.size() - 1; ix >= 0; --ix) {
-			delete input[ix];
-		}
-		delete[] input;
+		ASSERT_FALSE(config.HasCommandArgument(args[1]));
+		ASSERT_EQ(config.GetCommandArgument(args[1]), std::string(""));
 	}
 
 }  // namespace

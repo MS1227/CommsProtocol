@@ -7,7 +7,7 @@ namespace CommsProtocol {
         public BaseCommandConfiguration
     {
     public:
-        FileConfiguration(std::string filename, char* envp[], std::vector<std::string> validCommands);
+        FileConfiguration(std::string filename, std::vector<std::string> envp, std::vector<std::string> validCommands);
 
     private:
         std::string m_fileName;
