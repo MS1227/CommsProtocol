@@ -13,6 +13,7 @@ namespace CommsProtocol {
 			if (ValidCommand(*it)) {
 				key = *it;
 				++it;
+				if (it == m_inputCommandArgs.cend()) { break; } // We are at the end of our search.
 				value = *it;
 				std::cout << key << " = " << value << std::endl;
 
