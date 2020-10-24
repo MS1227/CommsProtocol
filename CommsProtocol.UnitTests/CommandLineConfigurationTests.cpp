@@ -2,7 +2,6 @@
 #include "CommandLineConfiguration.h"
 #include <string>
 #include <vector>
-#include <array>
 
 using namespace CommsProtocol;
 
